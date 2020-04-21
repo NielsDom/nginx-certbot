@@ -5,7 +5,7 @@ if ! [ -x "$(command -v docker-compose)" ]; then
   exit 1
 fi
 
-domains=(blitz-bot.com www.blitz-bot.com)
+domains=(blitz-bot.com)
 rsa_key_size=4096
 data_path="./data/certbot"
 email="contact@blitz-bot.com" # Adding a valid address is strongly recommended
