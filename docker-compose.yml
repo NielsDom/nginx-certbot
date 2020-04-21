@@ -13,7 +13,7 @@ services:
       - "443:443"
     command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
   certbot:
-    image: certbot/dns-google
+    image: certbot/certbot:v0.36.0
     restart: unless-stopped
     volumes:
       - ./data/certbot/conf:/etc/letsencrypt
