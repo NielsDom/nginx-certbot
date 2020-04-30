@@ -13,7 +13,7 @@ services:
       - "443:443"
     command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
   certbot:
-    image: certbot/certbot:v0.36.0
+    image: certbot/dns-google
     restart: unless-stopped
     volumes:
       - ./data/certbot/conf:/etc/letsencrypt
@@ -21,6 +21,7 @@ services:
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
   redis:
+    restart: always
     image: redis:latest
     command: redis-server --appendonly yes
     container_name: cache
@@ -30,6 +31,7 @@ services:
       - ./data:/data
 
   server:
+    restart: always
     container_name: server
     build:
       context: ./server/
@@ -46,6 +48,7 @@ services:
       - REDIS_URL=redis://cache
 
   client:
+    restart: always
     container_name: client
     build:
       context: ./client/
@@ -53,7 +56,5 @@ services:
     volumes:
       - ./client/:/usr/app
       - /usr/app/node_modules
-    depends_on:
-      - server
     ports:
       - "3000:3000"
